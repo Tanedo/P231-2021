@@ -1,0 +1,243 @@
+\documentclass[12pt]{article}
+%% arXiv paper template by Flip Tanedo
+%% last updated: Dec 2016
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%  THE USUAL PACKAGES  %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{nopageno}
+\usepackage{enumerate}
+\usepackage{parskip}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%  UNUSUAL PACKAGES        %%%%
+%%%  Uncomment as necessary. %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% MATH AND PHYSICS SYMBOLS
+%% ------------------------
+%\usepackage{slashed}       % \slashed{k}
+%\usepackage{mathrsfs}      % Weinberg-esque letters
+%\usepackage{youngtab}	    % Young Tableaux
+%\usepackage{pifont}        % check marks
+%\usepackage{bbm}           % \mathbbm{1} incomp. w/ XeLaTeX 
+%\usepackage[normalem]{ulem} % for \sout
+
+
+%% CONTENT FORMAT AND DESIGN (below for general formatting)
+%% --------------------------------------------------------
+\usepackage{lipsum}        % block of text (formatting test)
+%\usepackage{color}         % \color{...}, colored text
+%\usepackage{framed}        % boxed remarks
+%\usepackage{subcaption}    % subfigures; subfig depreciated
+%\usepackage{paralist}      % compactitem
+%\usepackage{appendix}      % subappendices
+%\usepackage{cite}          % group cites (conflict: collref)
+%\usepackage{tocloft}       % Table of Contents	
+
+%% TABLES IN LaTeX
+%% ---------------
+%\usepackage{booktabs}      % professional tables
+%\usepackage{nicefrac}      % fractions in tables,
+%\usepackage{multirow}      % multirow elements in a table
+%\usepackage{arydshln} 	    % dashed lines in arrays
+
+%% Other Packages and Notes
+%% ------------------------
+%\usepackage[font=small]{caption} % caption font is small
+
+
+
+\renewcommand{\thesection}{}
+\renewcommand{\thesubsection}{\arabic{subsection}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%  PAGE FORMATTING and (RE)NEW COMMANDS  %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[margin=2cm]{geometry}   % reasonable margins
+
+\graphicspath{{figures/}}	        % set directory for figures
+
+% for capitalized things
+\newcommand{\acro}[1]{\textsc{\MakeLowercase{#1}}}    
+
+\numberwithin{equation}{section}    % set equation numbering
+\renewcommand{\tilde}{\widetilde}   % tilde over characters
+\renewcommand{\vec}[1]{\mathbf{#1}} % vectors are boldface
+
+\newcommand{\dbar}{d\mkern-6mu\mathchar'26}    % for d/2pi
+\newcommand{\ket}[1]{\left|#1\right\rangle}    % <#1|
+\newcommand{\bra}[1]{\left\langle#1\right|}    % |#1>
+\newcommand{\Xmark}{\text{\sffamily X}}        % cross out
+
+
+\let\olditemize\itemize
+\renewcommand{\itemize}{
+  \olditemize
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+}
+
+
+% Commands for temporary comments
+\newcommand{\comment}[2]{\textcolor{red}{[\textbf{#1} #2]}}
+\newcommand{\flip}[1]{{\color{red} [\textbf{Flip}: {#1}]}}
+\newcommand{\email}[1]{\texttt{\href{mailto:#1}{#1}}}
+
+\newenvironment{institutions}[1][2em]{\begin{list}{}{\setlength\leftmargin{#1}\setlength\rightmargin{#1}}\item[]}{\end{list}}
+
+
+\usepackage{fancyhdr}		% to put preprint number
+
+
+
+%%%%%%%%%%%%%%%%%%%
+%%%  HYPERREF  %%%%
+%%%%%%%%%%%%%%%%%%%
+
+%% This package has to be at the end; can lead to conflicts
+\usepackage{microtype}
+\usepackage[
+	colorlinks=true,
+	citecolor=black,
+	linkcolor=black,
+	urlcolor=green!50!black,
+	hypertexnames=false]{hyperref}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%
+%%%  TITLE DATA  %%%%
+%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+
+\begin{center}
+
+    {\Large \textsc{Homework 1a:} 
+    \textbf{Dimensional Analysis}}
+    
+\end{center}
+
+\vskip .4cm
+
+\noindent
+\begin{tabular*}{\textwidth}{rlcrll}
+	\textsc{Course:}& Physics 231, \emph{Methods of Theoretical Physics} (2021)
+	&
+%	\hspace{1.2cm}
+	&
+	\\
+	\textsc{Instructor:}& Professor Flip Tanedo (\email{flip.tanedo@ucr.edu})
+	&
+	%\hfill
+	&
+	& 
+	\\
+	\textsc{Due by:}& \textbf{Wed}, September 29
+	&
+	%\hfill
+	&
+	%	
+\end{tabular*}
+
+\subsection{Identifying Dimensions} 
+As a warm up, write out the dimensions of the following quantities in the form $[Q] = L^\alpha, M^\beta T^\gamma$, that is: write out the length, mass, and time dimensions.
+
+\begin{enumerate}[(a)]
+	\item Electric charge, $e$. (In lecture we wrote out the answer; derive it.)
+	\item Action ($S = \int dt L$, where $L$ is the Lagrangian)
+	\item Magnetic field, $B$
+	\item Energy.
+\end{enumerate}
+
+\subsection{Lagrangian for a Scale-Invariant Theory} 
+
+Work in \emph{natural units} where the speed of light is $c=1$ and the reduced Planck's constant is $\hbar = 1$. In these units, dimensional analysis is simply keeping track of a single unit, say energy. The Lagrangian for a free particle in one dimension is
+\begin{align*}
+	L_\text{free} = \frac{1}{2}\left(\frac{dq}{dt}\right)^2 \ ,
+\end{align*}
+where $q(t)$ is the position of the particle.\footnote{You may be concerned that this does not look familiar from introductory [quantum/classical] mechanics. Don't worry: we have simply absorbed the constant mass into the definition of $q$; if you want, you can imagine that $q(t) = \sqrt{m} x(t)$ so that $L_\text{free} = \frac{1}{2} m\dot x^2$, as you would expect.}
+
+The theory described by $L_\text{free}$ obeys two notable symmetries: (1) time translation invariance and (2) scale invariance. Under time translation invariance $t\to t+ \tau$ for some constant $\tau$. Time translation invariance is clear because $S = \int dt\; L_\text{free}$ only depends on $dt$ and not $t$ explicitly.\footnote{Are you worried that $q(t)$ depends on $t$? Good. Observe that even though $q(t)$ transforms under a time translation, the action $S = \int dt \; L_\text{free}$ does not transform because one integrates over the same [transformed] region. If you're confused, try doing a definite integral $\int_a^b dt\;f(t)$ and then change the integration variable to $s=t+\tau$. You get the same result. You can wax poetic and reflect on how this connects to a notion of relativity: this theory offers no preferred coordinate system.}  Scale invariance is the shift $t \to \alpha t$; this means that $dt\to \alpha\, dt$. Under this transformation, we \emph{assume} that $q(t) \to \alpha^{1/2} q(t)$ so that $S$ unchanged.
+
+The most general theory of a single particle that obeys these two symmetries is $L_\text{free} - V[q]$. There is only one unique term in the potential, $V[q]$, that is scale invariant. Given that $V[q]$ should have no explicit time dependence (i.e.\ only depends on $t$ through $q(t)$) and should not carry any time derivatives, derive the potential for the theory up to an overall dimensionless constant. \textsc{Answer:} $V[q] \sim 1/q^2$. 
+
+\textsc{Remark:} This is conformal quantum mechanics, see Extra Credit.
+
+\section{Extra Credit}
+
+These problems are not graded and are for your edification. You are strongly encouraged to explore and discuss these topics, especially if they are in a field of interest to you.
+
+\subsection{Allometry}
+
+These two problems come from \emph{Mathematical Methods in Classical Mechanics} by the eminent mathematician V.I.~Arnold. 
+
+\begin{enumerate}[(a)]
+
+\item A desert animal has to cover great distance between sources of water. How does the maximal time the animal can run depend on the size $L$ of the animal?
+
+\item How does the height of an animal's jump depend on its size? Use the fact that the force applied by muscles is proportional to the strength of bones, which is itself is proportional to their cross section.
+
+\end{enumerate}
+
+\subsection{Conformal Quantum Mechanics}
+
+In Problem 2 we showed that the unique time-translation invariant and scale-invariant theory of a single particle is described by a Lagrangian
+\begin{align*}
+	L = \frac{1}{2}\dot q^2 - \frac{g}{2q^2} \ .
+\end{align*}
+Here $g$ is the overall dimensionless constant for the potential term. 
+\begin{enumerate}
+	\item Argue that a sensible theory has $g>0$.
+	\item Show that this theory is actual invariant under a more general transformation:
+	\begin{align*}
+		t &\to \frac{at+b}{ct+d}
+		&
+		q &\to \frac{q}{ct+d}
+		&
+		ad - bc &=1 \ .
+		% \label{eq:cft}
+	\end{align*}
+	Let us call these \emph{conformal} transformations. Note that in order for the theory to be invariant, it is sufficient that the \emph{action} is invariant, not that the \emph{Lagrangian} is invariant. That is: the Lagrangian can change by a total time derivative, $L \to L + dG/dt$ for some $G[q]$.
+	\item The parameters $a,b,c,d$ of the transformation may be represented as a $2\times 2$ matrix:
+	\begin{align*}
+		\begin{pmatrix}
+			a & b\\
+			c & d
+		\end{pmatrix} \ .
+	\end{align*}
+	Show that successive conformal transformations correspond to the usual matrix multiplication. That is, if we do a conformal transformation by $a,b,c,d$ and then a second conformal transformation by $a',b',c',d'$, then this is equivalent to a conformal transformation given by
+	\begin{align*}
+		\begin{pmatrix}
+			a'' & b'' \\
+			c'' & d''
+		\end{pmatrix}
+		=
+		\begin{pmatrix}
+			a' & b' \\
+			c' & d
+		\end{pmatrix}
+		\begin{pmatrix}
+			a & b \\
+			c & d
+		\end{pmatrix} \ .
+	\end{align*}
+	The mathematical name for the transformations given by a $2\times 2$ matrix of real numbers with unit determinant is SL(2,$\mathbb{R}$). 
+\end{enumerate}
+For more on conformal quantum mechanics, see ``Conformal Invariance in Quantum Mechanics'' by de Alfaro et al.\ \emph{Il Nuovo Cimento A} \textbf{34}, 569 (1976).
+
+
+
+
+\end{document}
