@@ -1,0 +1,499 @@
+\documentclass[12pt]{article}
+%% arXiv paper template by Flip Tanedo
+%% last updated: Dec 2016
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%  THE USUAL PACKAGES  %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{nopageno}
+\usepackage{enumerate}
+\usepackage{parskip}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%  UNUSUAL PACKAGES        %%%%
+%%%  Uncomment as necessary. %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% MATH AND PHYSICS SYMBOLS
+%% ------------------------
+%\usepackage{slashed}       % \slashed{k}
+%\usepackage{mathrsfs}      % Weinberg-esque letters
+%\usepackage{youngtab}	    % Young Tableaux
+%\usepackage{pifont}        % check marks
+\usepackage{bbm}           % \mathbbm{1} incomp. w/ XeLaTeX 
+%\usepackage[normalem]{ulem} % for \sout
+
+
+%% CONTENT FORMAT AND DESIGN (below for general formatting)
+%% --------------------------------------------------------
+\usepackage{lipsum}        % block of text (formatting test)
+%\usepackage{color}         % \color{...}, colored text
+%\usepackage{framed}        % boxed remarks
+%\usepackage{subcaption}    % subfigures; subfig depreciated
+%\usepackage{paralist}      % compactitem
+%\usepackage{appendix}      % subappendices
+%\usepackage{cite}          % group cites (conflict: collref)
+%\usepackage{tocloft}       % Table of Contents	
+
+%% TABLES IN LaTeX
+%% ---------------
+%\usepackage{booktabs}      % professional tables
+%\usepackage{nicefrac}      % fractions in tables,
+%\usepackage{multirow}      % multirow elements in a table
+%\usepackage{arydshln} 	    % dashed lines in arrays
+
+%% Other Packages and Notes
+%% ------------------------
+%\usepackage[font=small]{caption} % caption font is small
+
+
+
+\renewcommand{\thesection}{}
+\renewcommand{\thesubsection}{\arabic{subsection}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%  PAGE FORMATTING and (RE)NEW COMMANDS  %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[margin=2cm]{geometry}   % reasonable margins
+
+\graphicspath{{figures/}}	        % set directory for figures
+
+% for capitalized things
+\newcommand{\acro}[1]{\textsc{\MakeLowercase{#1}}}    
+
+\numberwithin{equation}{subsection}    % set equation numbering
+\renewcommand{\tilde}{\widetilde}   % tilde over characters
+\renewcommand{\vec}[1]{\mathbf{#1}} % vectors are boldface
+
+\newcommand{\dbar}{d\mkern-6mu\mathchar'26}    % for d/2pi
+\newcommand{\ket}[1]{\left|#1\right\rangle}    % <#1|
+\newcommand{\bra}[1]{\left\langle#1\right|}    % |#1>
+\newcommand{\Xmark}{\text{\sffamily X}}        % cross out
+
+
+\let\olditemize\itemize
+\renewcommand{\itemize}{
+  \olditemize
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+}
+
+
+% Commands for temporary comments
+\newcommand{\comment}[2]{\textcolor{red}{[\textbf{#1} #2]}}
+\newcommand{\flip}[1]{{\color{red} [\textbf{Flip}: {#1}]}}
+\newcommand{\email}[1]{\texttt{\href{mailto:#1}{#1}}}
+
+\newenvironment{institutions}[1][2em]{\begin{list}{}{\setlength\leftmargin{#1}\setlength\rightmargin{#1}}\item[]}{\end{list}}
+
+
+\usepackage{fancyhdr}		% to put preprint number
+
+
+
+%%%%%%%%%%%%%%%%%%%
+%%%  HYPERREF  %%%%
+%%%%%%%%%%%%%%%%%%%
+
+%% This package has to be at the end; can lead to conflicts
+\usepackage{microtype}
+\usepackage[
+	colorlinks=true,
+	citecolor=black,
+	linkcolor=black,
+	urlcolor=green!50!black,
+	hypertexnames=false]{hyperref}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%
+%%%  TITLE DATA  %%%%
+%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+
+\begin{center}
+
+    {\Large \textsc{Homework 2b:} 
+    \textbf{Solving for Green's Functions}}
+    
+\end{center}
+
+\vskip .4cm
+
+\noindent
+\begin{tabular*}{\textwidth}{rlcrll}
+	\textsc{Course:}& Physics 231, \emph{Methods of Theoretical Physics} (2021)
+	&
+%	\hspace{1.2cm}
+	&
+	\\
+	\textsc{Instructor:}& Professor Flip Tanedo (\email{flip.tanedo@ucr.edu})
+	&
+	%\hfill
+	&
+	& 
+	\\
+	\textsc{Due by:}& Mon, October 25
+	&
+	%\hfill
+	&
+	%	
+\end{tabular*}
+
+
+
+You are responsible for solving \emph{one} of these problems (assigned on our internal Google Sheet). You are invited to solve as many as you find edifying.
+
+
+\subsection*{Introduction: Completeness}
+
+The completeness relation for an orthonormal basis $\{ \ket i \}$ is
+\begin{align}
+	\mathbbm 1 = \sum_i  |i \rangle \langle i | \ .
+\end{align}
+This is a completely benign and `obvious' statement. For three-dimensional Euclidean space\footnote{The statement `Euclidean space' is a specification of the metric: $g_{ij} = \text{diag}(1,1,1)$.} in the standard basis, this is simply the statement that
+\begin{align}
+	\begin{pmatrix}
+		1 & 0 & 0 \\
+		0 & 1 & 0 \\
+		0 & 0 & 1
+	\end{pmatrix}
+	= 
+	\begin{pmatrix}
+		1 & 0 & 0 \\
+		0 & 0 & 0 \\
+		0 & 0 & 0
+	\end{pmatrix}
+	+ 
+	\begin{pmatrix}
+		0 & 0 & 0 \\
+		0 & 1 & 0 \\
+		0 & 0 & 0
+	\end{pmatrix}
+	+
+	\begin{pmatrix}
+		0 & 0 & 0 \\
+		0 & 0 & 0 \\
+		0 & 0 & 1
+	\end{pmatrix} \ .
+\end{align}
+Make sure it's clear that the right-hand side is precisely what we mean by $\ket 1 \bra 1 + \ket 2 \bra 2 + \ket 3 \bra 3$.
+
+There is nothing special about one orthonormal basis over another. For example, we could imagine another basis:
+\begin{align}
+	\ket{1'} 
+	&=
+	\frac{1}{\sqrt{2}}
+	\begin{pmatrix}
+		1 \\ 1 \\ 0
+	\end{pmatrix}
+	&
+	\ket{2'} 
+	&=
+	\frac{1}{\sqrt{2}}
+	\begin{pmatrix}
+		\phantom{+}1 \\ -1 \\ \phantom{+}0
+	\end{pmatrix}
+	&
+	\ket{3'} 
+	&=
+	\begin{pmatrix}
+		0 \\ 0 \\ 1
+	\end{pmatrix}
+\end{align}
+The completeness relation in this basis is $\mathbbm{1} = \ket{1'} \bra{1'} + \ket{2'} \bra{2'} + \ket 3 \bra 3$, or more simply:
+\begin{align}
+	\begin{pmatrix}
+		1 & 0 & 0 \\
+		0 & 1 & 0 \\
+		0 & 0 & 1
+	\end{pmatrix}
+	= 
+	\frac{1}{2}
+	\begin{pmatrix}
+		1 & 1 & 0 \\
+		1 & 1 & 0 \\
+		0 & 0 & 0
+	\end{pmatrix}
+	+ 
+	\frac{1}{2}
+	\begin{pmatrix}
+		\phantom{+}1 & -1 & 0 \\
+		-1 & \phantom{+}1 & 0 \\
+		\phantom{+}0 & \phantom{+}0 & 0
+	\end{pmatrix}
+	+
+	\begin{pmatrix}
+		0 & 0 & 0 \\
+		0 & 0 & 0 \\
+		0 & 0 & 1
+	\end{pmatrix} \ .
+\end{align}
+
+This notion of completeness carries over directly to function space. Problem 1 explores the function space completeness relation as a trick to solve for Green's functions as an infinite series.
+
+
+
+\subsection{A Green's function by completeness}
+
+Three formulaic ways of solving for Green's functions are:
+\begin{enumerate}
+	\item Fourier transforming to turn the differential operator into an algebraic one, and then doing a contour integral to go back to position space.
+	\item Solving the homogeneous equation and patching together two solutions over the $\delta$-function. 
+	\item Using the completeness of eigenfunctions.
+\end{enumerate}
+We will spend most of this course highlighting method 1. Method 2 will be familiar from electrodynamics. Here we use the third method, which is based on the eigenfunction completeness relation,
+\begin{align}
+	\sum_n e_n^*(y) e_n(x) = \delta(x-y) \ .
+\end{align}
+If you know the eigenvalues of the linear differential operator, $L_x$, then you can use this relation to hack together the Green's function $G$ because $L_x G(x,y) = \delta(x-y)$.  The subscript $x$ in $L_x$ means that the operator is a function of $x$ and derivative operators with respect to $x$.
+
+\textsc{References}: This method is discussed in  Matthews \& Walker chapter 9-4, Stone \& Goldbart chapter 5.4, Cahill chapter 6.38, and Byron \& Fuller chapter 7.2. 
+
+In this problem, we consider a second order differential equation acting on a state $\psi(x)$ with a source $s(x)$. 
+\begin{align*}
+	\left(-\frac{d^2}{dx^2} + k^2 \right) \psi(x) = s(x) \ .
+\end{align*}
+We consider the domain $x\in[0,1]$ with boundary conditions $\psi(0) = \psi(1) = 0$.
+
+\subsubsection{Eigenfunctions}
+
+What are the eigenfunctions $e_n(x)$ and the corresponding eigenvalues $\lambda_n$? Recall that an eigenfunction of a linear operator $L_x$ satisfies $L_x e_n(x) = \lambda_n e_n(x)$. 
+
+
+\textsc{Hint:} The eigenfunctions of $-d^2/dx^2$ are $\psi_n(x) = \sqrt{2} \sin (n\pi x)$ with eigenvalues $n^2 \pi^2$. What changes when the operator $L_x$ includes an additive constant?
+
+
+\subsubsection{Completeness}
+
+
+Write down the Green's function $G(x,y)$ using the completeness trick with respect to eigenfunctions $e_n$ with eigenvalues $\lambda_n$: 
+\begin{align}
+	G(x,y) = \sum_n \frac{e_n^*(y)e_n(x)}{\lambda_n} \ .
+\end{align}
+
+\textsc{Hint:} Once you did the previous part, this step takes about twenty seconds depending on how quickly you write.
+
+
+\subsubsection{Hands on}
+
+You have a free license for several types of scientific software 
+through \acro{UCR} through MySoftware\footnote{\url{http://cnc.ucr.edu/mysoftware/}}. This problem requires some plotting. I suggest using \emph{Mathematica} or a \texttt{Jupyter} notebook with \texttt{SciPy} and \texttt{matplotlib}\footnote{The latter option is open source. If you're not used to using Jupyter notebooks but are familiar with Python, a user-friendly start may be using Google Colaboratory, \url{https://colab.research.google.com}}. 
+
+Plot the solution to the Green's function $G(x,y)$ for $y = 0.5$ and $k = 0.2$, summing from $n=1$ to $n=10$. Here's the general way to format it in \emph{Mathematica}:
+\begin{center}
+	\includegraphics[width=.6\textwidth]{P231_2019_HW2_fig1.png}
+\end{center}
+
+The highlighted piece and the example plot are \emph{completely wrong}! Fill it in with the correct $G(x,y)$ and plot it. It may help to use the `Basic Math Input' palette if you're unfamiliar with this. If this task is very painful, please ask a friend. If this is still very painful, then you may use any other plotting program that you wish. 
+
+Does this shape make sense? What do you expect will happen as $n$ becomes larger? Try it for $n=100$. Explore what happens as you change $k$ and $y$. (Make sure $y$ is in the domain of the function space!) Take a moment to have a nice warm cup of tea, enjoy the agreeable weather outside, and meditate upon why this shape of the Green's function makes sense and the kinds of physical problem where Green's function may be relevant. You do not have to write up these meditations, but I do strongly suggest the tea and outdoors.  
+
+
+
+
+\subsection{A Green's function by patching}
+
+\emph{This looks like a long problem, but it's mostly reading and understanding. Each step is modest.}
+
+%\textcolor{blue}{\textbf{Correction} (10/27): The $(d/dx)^2$ operator is not self-adjoint. As we saw in class, the formally self adjoint operator is $-(d/dx)^2$. As a result, the eigenvalues of $(d/dx)^2$ are negative rather than positive. this problem has been updated to have the corrected operator. Homework 4 had the same error, though it only shows up in the plot for large $k^2$. Thanks to Wei-Xiang Feng for catching this.}
+
+% This is kind of tricky, see page 270 of MW (9-4: inhomogeneous problems)
+%
+%Thus far in this course, we have examined two ways of solving for Green's functions:
+%\begin{enumerate}
+%	\item \textbf{Fourier transform}. We talked about this briefly for the electrostatic problem. With this method, it is easy to solve for $\tilde G(k)$, the momentum space Green's function, but we will rely on the residue theorem to perform the integral to go back to position space.
+%	\item \textbf{Completeness and projection}. In Homework 4, Problem \#2 we solved a simple Green's function by using the completeness of a set of eigenfunctions. This method generalizes to the `named functions' of physics\footnote{For example: Bessel functions, Legendre polynomials, Spherical harmonics. To the best of my knowledge, `Spherical' was not a mathematician.} that are special because they are eigenfunctions for common classes of differential operators.
+%\end{enumerate}
+In this problem we solve for a Green's function by patching together solutions of the homogeneous equation.  We examine the same type system as the first problem: consider a second-order differential equation acting on a state $\psi(x)$ with a source $s(x)$. 
+\begin{align*}
+\mathcal O \psi(x) = 
+	\left(-\frac{d^2}{dx^2} + k^2 \right) \psi(x) = s(x) \ .
+\end{align*}
+We consider the domain $x\in[0,1]$ with boundary conditions $\psi(0) = \psi(1) = 0$. \textbf{For simplicity}, we'll take $k^2 = 0$ and leave the $k^2 \neq 0$ case for extra credit.
+
+
+%Matthews and Walker, p 258
+
+We want to solve the Green's function equation, $$\mathcal O G(x,y) = \delta(x-y)\, .$$ In this method, we solve the \emph{homogeneous} equation $\mathcal O G(x,y) = 0$ for $x\neq y$ in the two regions $x<y$ and $x>y$. These two solutions will each have independent coefficients that we must patch together at $x=y$.
+
+\subsubsection{Solve the homogeneous equation}
+
+Find the solutions to the two \emph{homogeneous} equations in the regions away from the $\delta$-function spike:
+\begin{align}
+ 	-\left(\frac{d}{dx}\right)^2 G_{<}(x,y) = 0  
+ 	& \quad\text{ in }\quad 0 < x < y \leq 1 
+ 	\\
+ 	-\left(\frac{d}{dx}\right)^2 G_{>}(x,y) = 0  
+ 	& \quad\text{ in }\quad 0 < y < x \leq 1
+\end{align}
+Don't forget to impose the boundary conditions $G(0, y) = G(L,y) = 0$. Understand why it makes sense that $\psi(0) = \psi(1) = 0$ imposes the same condition on the Green's functions: If the Green's function did not satisfy these conditions, then you could construct sources that violate the boundary conditions because $\psi(1) = \int G(1,y) s(y)\, dy \neq 0$.
+
+The Green's function $G(x,y)$ is now piecewise defined
+\begin{align}G(x,y) = \left\{ 
+\begin{array}{ll}
+ 	G_<(x,y) & \quad\text{ if } x<y\\
+ 	G_>(x,y) & \quad\text{ if } x>y
+ \end{array}\right. .
+ \label{eq:piecewise:def}
+ \end{align}
+Check to make sure that you have the correct number of undetermined coefficients. 
+
+\textsc{Hint}: if you're not sure what the solution to the homogeneous differential equation is, then you're over thinking it. It's not a trigonometric function. If you're still confused, refer back to your plot the previous problem.
+
+\subsubsection{Patching, Part 1}
+For fixed $y$, integrate the Green's function equation over an infinitesimal sliver, $x \in (y-\varepsilon, y + \varepsilon)$, with $\epsilon \to 0$: 
+\begin{align}
+	\int_{y-\varepsilon}^{y+\varepsilon} dx\, \left(\frac{d}{dx}\right)^2 G(x,y) &=  
+	\int_{y-\varepsilon}^{y+\varepsilon} dx\; \delta(x-y)
+	\ .
+	\label{eq:patching:1}
+\end{align}
+\textsc{Hint}: It may be useful to remember that
+\begin{align}
+	\int_{y-\varepsilon}^{y+\varepsilon} dx\; \frac{df(x)}{dx} = f(y+\epsilon) - f(y-\epsilon) \ .
+\end{align}
+
+Write out the resulting equation in terms of $dG_</dx$ and $dG_>/dx$ at $x=y$. You will find that the slope of the Green's function, $dG/dx$, is \emph{discontinuous} at $x=y$. 
+
+
+\subsubsection{Patching, Part 2}
+
+Integrate (\ref{eq:patching:1}) again over $x\in(y-\epsilon y+\epsilon)$ to relate $G_<$ and $G_>$ at $x=y$.
+
+
+\textsc{Answer}: $dG/dx$ has a finite discontinuity at $x=y$, therefore $G$ is \emph{continuous} at $x=y$. The discontinuity in the slope gives a kink in $G$,
+\begin{align}
+	\left.G_<(x, y)\right|_{x=y} &= \left.G_>(x, y)\right|_{x=y} \ .
+\end{align}
+We've found that the second derivative is a $\delta$-function (singular), the first derivative is simply discontinuous, and the zeroth derivative (the Green's function itself) is continuous.
+
+\subsubsection{Patching, Part 3}
+
+Take all of the above results and write down the piece-wise definition of $G(x,y)$ in (\ref{eq:piecewise:def}) as an explicit function of $x$ and $y$ with all coefficients determined. Sketch $G(x,y)$  for $y=0.5$. If you did Problem 1, compare with the plots in Problem 1.3.
+
+\subsubsection{Extra Credit: $k^2\neq 0$}
+
+\emph{This problem is not graded and is purely for your ``enjoyment.''} Perform the same steps for the case of $k^2\neq 0$. The homogeneous solution is now a sine, which makes things a bit more complicated. The procedure is completely the same and the $k^2 \lesssim 1$ case is well approximated by $k^2=0$, as you will have noticed from the plot in the previous problem. \textsc{Solution}: Matthews \& Walker, Chapter 9--4. 
+
+
+
+
+
+
+
+
+
+
+\section{Extra Credit}
+
+These problems are not graded and are for your edification. You are strongly encouraged to explore and discuss these topics, especially if they are in a field of interest to you.
+
+
+
+
+
+
+
+
+
+\subsection{Black Hole Entropy and Dimensional Analysis}
+
+This problem is from Tony Zee's \emph{Einstein Gravity in a Nutshell}. 
+
+\subsubsection{The Planck Mass}
+
+In natural units, the Newton constant $G$ has [mass] dimension $[G] = -2$, so that we can define a mass scale
+\begin{align}
+	M_P = \frac{1}{\sqrt{G}} \ .
+\end{align}
+This is called the \textbf{Planck mass}. Restore the factors of $\hbar$ and $c$ to make this definition correct in `unnatural' units where we keep track of length and time dimensions.
+
+\subsubsection{Hawking Radiation}
+
+Black holes can evaporate by Hawking radiation. A cartoon picture of this process is as follows: quantum mechanics + special relativity tells us that the vacuum (`empty' space) is composed of virtual particle--anti-particle pairs. Near the event horizon of a black hole, one of these particles can fall into the black hole while the other radiates away as a physical particle. This means that black holes have a temperature. 
+
+Use dimensional analysis to determine how this \textbf{Hawking temperature} scales with the mass of the black hole. How does $T_H$ scale with the combination $GM$? Observe that the black hole gets \emph{hotter} as it loses energy.
+
+
+\textsc{Hint}: there's one subtlety. There are two mass scales in the problem: the black hole mass, $M$, and the Planck mass, $M_P = 1/\sqrt{G}$. In order to be able to use dimensional analysis, the additional piece of information is that $G$ is a gravitational coupling, so that gravitational effects should go like $GM$. 
+
+
+\subsubsection{The Holographic Principle}
+
+Recall from thermodynamics that entropy, $S$, is related to energy $E$ and temperature $T$ by
+\begin{align}
+	\frac{dS}{dE} = \frac{1}{T} \ .
+\end{align}
+\begin{enumerate}[(i)]
+	\item Identify the temperature with the Hawking temperature $T=T_H$ and set the energy to be the mass of the black hole so that $dE = dM$. Integrate with respect to the black hole mass to find how entropy scales with mass, $S \sim M^?$.
+	\item The radius of the black hole's event horizon scales like $R = GM$. How does the black hole's entropy scale with its characteristic length scale? 
+	\item Contrast the above result to the expected scaling of entropy in ordinary thermodynamics. Recall that entropy is an \emph{extensive}\footnote{An \textbf{extensive} property is one that adds for separate subsystem. Consider a system of two lazy cats. The mass of the combined system is equal to the sum of the masses of each cat. This is in contrast to temperature, which is \textbf{intensive}; the temperature of the multi-lazy-cat system is $T_\text{cat}$ to matter how many cats there are. This example obviously breaks down at large numbers of cats.} measure of the number of microstates in a system.
+\end{enumerate}
+
+The solution to this problem is spelled out in  the introduction to Zee's \emph{Einstein's Gravity in a Nutshell}. The `holographic principle' is the proposal that the properties of the black hole are encoded on its surface rather than its volume. This is analogous to how a hologram is a 3D image encoded onto a 2D surface. A manifestation of the holographic principle is the AdS/CFT correspondence, which posits that certain theories of strongly interacting systems in $d$-dimensions are mathematically identical to a weakly-coupled $(d+1)$-dimensional gravitational theory.
+
+
+
+
+\subsection{Renormalization Group as Dimensional Analysis}
+
+This problem is recommended for particle/nuclear physicists and especially to theorists of any type.
+
+Read the paper ``Dimensional Analysis in Field Theory: An Elementary Introduction to Broken Scale Invariance and the Renormalization Group Equations'' by Paul Stevenson\footnote{Annals Phys. \textbf{132} (1981) 383, \url{http://dx.doi.org/10.1016/0003-4916(81)90072-5}}. This paper describes the phenomenon of dimensional transmutation in quantum/statistical field theory in a way that strips it of the mysticism that tends to appear when you first learn field theory. In particular, it explains why dimensionless `coupling constants' are not really constant and are scale dependent. Understand the  dimensional analysis theorem in the paper and then understand how that theorem is evaded in actual physics. Theorists of any specialty should take time to understand this paper carefully.\
+
+
+\subsection{Sturm--Liouville Operator}
+
+This question is based on Matthews \& Walker, chapter 9--2 and/or Stone \& Goldbart chapter 4.2. Consider the \textbf{Sturm--Liouville} differential operator
+\begin{align}
+	L = p_2(x) \left(\frac{d}{dx}\right)^2
+	+ p_1(x)\frac{d}{dx}
+	+ p_0(x) .
+\end{align}
+Assume weight $w(x) = 1$ and some domain $x\in [a,b]$.
+
+%\textsc{Reference}: Refer to Stone \& Goldbart chapter 4 for a discussion of formal versus concrete (what we called `proper') linear differential operators. We use a slightly different notation, but the question of a formal adjoint is explored in 4.2 with the Sturm--Liouville operator identified in equation (4.28). A more general discussion that follows more of the spirit of the lecture is in Matthews \& Walker Chapter 9-2.
+
+\subsubsection{Formal adjoint}
+Using integration by parts, show that the \textbf{formal adjoint} of this operator is 
+\begin{align}
+	L^\dag = \left(\frac{d}{dx}\right)^2 p_2(x)
+	- \left(\frac{d}{dx}\right)p_1(x)
+	+ p_0(x) \ ,
+\end{align}
+where we use the notation 
+\begin{align}
+	\left[\left(\frac{d}{dx}\right)^n p_n(x)\right] f(x) \equiv 
+		\left(\frac{d}{dx}\right)^n 
+		\left[ p_n(x)\, f(x)\right] \ .
+\end{align}
+
+\subsubsection{Self-Adjoint Case}
+
+Show that in order for $L$ to be formally self-adjoint, that is $L = L^\dag$ (without considering boundary conditions), then the following conditions must hold:
+\begin{align}
+	p_1(x) &= 2p_2'(x) - p_1(x) \\
+	p_0(x) &= p_x''(x) - p_1(x) + p_0(x) \ .
+\end{align}
+Thus $L$ is self-adjoint (Hermitian) if $p_1(x) = p_2'(x)$. $L$ can be written succinctly as:
+\begin{align}
+	L &= \frac{d}{dx}
+		\left(p_2(x)\frac{d}{dx}\right) + p_0(x) \ .
+\end{align}
+
+
+
+
+\end{document}
